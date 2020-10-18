@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileSystemUtils\FileSystemUtils.csproj" />
-    <ProjectReference Include="..\NamingUtils\NamingUtils.csproj" />
+    <ProjectReference Include="..\SettleImageGallery\SettleImageGallery.csproj" />
   </ItemGroup>
 
 </Project>

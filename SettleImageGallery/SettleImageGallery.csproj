@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FileSystemUtils\FileSystemUtils.csproj" />
+    <ProjectReference Include="..\NamingUtils\NamingUtils.csproj" />
+  </ItemGroup>
+
 </Project>
