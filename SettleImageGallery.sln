@@ -5,11 +5,13 @@ VisualStudioVersion = 15.0.28307.1145
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SettleImageGallery", "SettleImageGallery\SettleImageGallery.csproj", "{7D46CFC8-B259-4B53-9D01-CBA043C80A10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamingUtils", "NamingUtils\NamingUtils.csproj", "{8CFF3177-D46E-486D-8F17-C2E66C34B3C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NamingUtils", "NamingUtils\NamingUtils.csproj", "{8CFF3177-D46E-486D-8F17-C2E66C34B3C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamingUtils.UnitTests", "NamingUtils.UnitTests\NamingUtils.UnitTests.csproj", "{CBC002F5-A42B-42F8-A329-7420088F33EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NamingUtils.UnitTests", "NamingUtils.UnitTests\NamingUtils.UnitTests.csproj", "{CBC002F5-A42B-42F8-A329-7420088F33EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSystemUtils", "FileSystemUtils\FileSystemUtils.csproj", "{1307E092-21EE-4CEE-B8F6-E4595FB74813}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileSystemUtils", "FileSystemUtils\FileSystemUtils.csproj", "{1307E092-21EE-4CEE-B8F6-E4595FB74813}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSystemUtils.UnitTests", "FileSystemUtils.UnitTests\FileSystemUtils.UnitTests.csproj", "{B346A5DC-2252-436D-9088-6E679A7889B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1307E092-21EE-4CEE-B8F6-E4595FB74813}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1307E092-21EE-4CEE-B8F6-E4595FB74813}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1307E092-21EE-4CEE-B8F6-E4595FB74813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B346A5DC-2252-436D-9088-6E679A7889B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B346A5DC-2252-436D-9088-6E679A7889B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B346A5DC-2252-436D-9088-6E679A7889B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B346A5DC-2252-436D-9088-6E679A7889B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
