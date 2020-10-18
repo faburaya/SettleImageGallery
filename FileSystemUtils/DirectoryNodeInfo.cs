@@ -64,14 +64,15 @@ namespace FileSystemUtils
             return new DirectoryNodeInfo(
                 directoryPath,
                 // Ordner (durch Rekursion):
-                from dir in fsysDirInfo.GetDirectories()
-                orderby dir.Name
-                select LoadTreeFrom(dir.FullName, fileFilter),
+                (from dir in fsysDirInfo.GetDirectories()
+                 orderby dir.Name
+                 select LoadTreeFrom(dir.FullName, fileFilter)) ?? new DirectoryNodeInfo[0],
                 // Dateien:
-                from file in fsysDirInfo.GetFiles()
-                where fileFilter(file)
-                orderby file.Name
-                select file.Name);
+                (from file in fsysDirInfo.GetFiles()
+                 where fileFilter(file)
+                 orderby file.Name
+                 select file.Name) ?? new string[0]
+            );
         }
     }
 }
