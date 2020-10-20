@@ -32,12 +32,12 @@ namespace NamingUtils
         }
 
         /// <summary>
-        /// Erzeugt eine Liste von numerischen Präfixen,
+        /// Erzeugt eine Liste von als String ausdruckte Nummer,
         /// die für die Erzeugung von Namen verwendet werden kann.
         /// </summary>
         /// <param name="count">Die eingegebene Größe der Liste.</param>
-        /// <returns>Eine aufsteigend geordnete Liste von Präfixen.</returns>
-        public static string[] CreateOrderedListOfNumericalPrefixes(ushort count)
+        /// <returns>Eine aufsteigend geordnete Liste von Nummer.</returns>
+        public static string[] CreateOrderedListOfPrintedNumbers(ushort count)
         {
             if (count == 0)
                 throw new ArgumentOutOfRangeException("Die eingegebene Größe der Liste muss großer als null sein!");
@@ -50,12 +50,12 @@ namespace NamingUtils
 
             for (int idx = 0; idx < count; ++idx)
             {
-                list[idx] = string.Format("{0}_", indexes[idx].ToString(formatForNumber));
+                list[idx] = indexes[idx].ToString(formatForNumber);
             }
 
             return list;
         }
-
+        
         /// <summary>
         /// Schlägt einen Bereich für den Index vor,
         /// der als Präfix in den Namen verwendet wird.

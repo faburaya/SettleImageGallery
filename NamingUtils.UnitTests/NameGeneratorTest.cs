@@ -7,37 +7,37 @@ namespace NamingUtils.UnitTests
     public class NameGeneratorTest
     {
         [Fact]
-        public void CreateOrderedListOfNumericalPrefixes_WhenCountIsZero_ThenThrow()
+        public void CreateOrderedListOfPrintedNumbers_WhenCountIsZero_ThenThrow()
         {
-            Assert.ThrowsAny<ArgumentException>(() => NamingUtils.NameGenerator.CreateOrderedListOfNumericalPrefixes(0));
+            Assert.ThrowsAny<ArgumentException>(() => NamingUtils.NameGenerator.CreateOrderedListOfPrintedNumbers(0));
         }
 
         [Fact]
-        public void CreateOrderedListOfNumericalPrefixes_WhenCountIsOne()
+        public void CreateOrderedListOfPrintedNumbers_WhenCountIsOne()
         {
             Assert.Collection(
-                NamingUtils.NameGenerator.CreateOrderedListOfNumericalPrefixes(1),
-                prefix => Assert.Equal("05_", prefix));
+                NamingUtils.NameGenerator.CreateOrderedListOfPrintedNumbers(1),
+                prefix => Assert.Equal("05", prefix));
         }
 
         [Theory]
-        [InlineData(2, new string[] { "02_", "07_" })]
-        [InlineData(3, new string[] { "02_", "05_", "08_" })]
-        [InlineData(4, new string[] { "012_", "037_", "062_", "087_" })]
-        [InlineData(8, new string[] { "006_", "018_", "030_", "042_", "054_", "066_", "078_", "090_" })]
-        public void CreateOrderedListOfNumericalPrefixes_WhenCountIsSmall(ushort givenCount, string[] expectedPrefixes)
+        [InlineData(2, new string[] { "02", "07" })]
+        [InlineData(3, new string[] { "02", "05", "08" })]
+        [InlineData(4, new string[] { "012", "037", "062", "087" })]
+        [InlineData(8, new string[] { "006", "018", "030", "042", "054", "066", "078", "090" })]
+        public void CreateOrderedListOfPrintedNumbers_WhenCountIsSmall(ushort givenCount, string[] expectedPrefixes)
         {
-            var actualPrefixes = NamingUtils.NameGenerator.CreateOrderedListOfNumericalPrefixes(givenCount);
+            var actualPrefixes = NamingUtils.NameGenerator.CreateOrderedListOfPrintedNumbers(givenCount);
             Assert.Equal(expectedPrefixes, actualPrefixes);
         }
 
         [Theory]
-        [InlineData(20, @"\d{4}_")]
-        [InlineData(50, @"\d{4}_")]
-        [InlineData(90, @"\d{5}_")]
-        public void CreateOrderedListOfNumericalPrefixes_WhenCountIsBig(ushort givenCount, string patternOfPrefix)
+        [InlineData(20, @"\d{4}")]
+        [InlineData(50, @"\d{4}")]
+        [InlineData(90, @"\d{5}")]
+        public void CreateOrderedListOfPrintedNumbers_WhenCountIsBig(ushort givenCount, string patternOfPrefix)
         {
-            var prefixes = NamingUtils.NameGenerator.CreateOrderedListOfNumericalPrefixes(givenCount);
+            var prefixes = NamingUtils.NameGenerator.CreateOrderedListOfPrintedNumbers(givenCount);
             Assert.Equal(givenCount, prefixes.Length);
             Assert.All(prefixes, prefix => Regex.IsMatch(prefix, patternOfPrefix));
         }
