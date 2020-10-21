@@ -54,7 +54,7 @@ namespace SettleImageGallery
                 foreach (string fileName in dirInfoTree.FileNames)
                 {
                     string fromPath = Path.Join(dirInfoTree.FullPath, fileName);
-                    string toNewName = $"{prefix}_{nameRoot}_{suffixes[idx++]}.{Path.GetExtension(fileName)}";
+                    string toNewName = $"{prefix}{nameRoot}_{suffixes[idx++]}.{Path.GetExtension(fileName)}";
                     renamings.Add((fromPath, toNewName));
                 }
             }
@@ -71,7 +71,7 @@ namespace SettleImageGallery
                 int idx = 0;
                 foreach (var subdir in dirInfoTree.Subdirectories)
                 {
-                    string newPrefix = $"{prefix}_{indices[idx++]}";
+                    string newPrefix = $"{prefix}{indices[idx++]}_";
                     renamings.AddRange(PlanFileRenamings(subdir, newPrefix));
                 }
             }
