@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 
 namespace SettleImageGallery
 {
@@ -19,6 +18,33 @@ namespace SettleImageGallery
         }
 
         /// <summary>
+        /// Listet alle Bewegungen von Dateien auf, die ausgeführt werden müssen.
+        /// </summary>
+        /// <param name="dirInfoTree">
+        /// Die Diagramm des Dateisystems unter einem Order,
+        /// der alle Dateien enthält, die verschoben werden müssen.</param>
+        /// <returns>Eine Liste mit allen auszuführenden Bewegungen.</returns>
+        private static List<(string from, string to)> ListFileMovesToExecute(FileSystemUtils.DirectoryNodeInfo dirInfoTree)
+        {
+            var destinationByOrigin = new Dictionary<string, string>(); // hilt bei der Erkennung eines Zusammenstoßes
+            var renamings = PlanFileRenamings(dirInfoTree, "");
+            var moves = new List<(string from, string to)>(renamings.Count);
+
+            foreach ((string fromPath, string toNewName) in renamings)
+            {
+                if (!destinationByOrigin.TryAdd(toNewName, fromPath))
+                {
+                    string coincidentFile = destinationByOrigin[toNewName];
+                    throw new ApplicationException($"Unerwarteter Fehler: zwei Dateien müssen zum gleichen Namen umbennant werden! - {fromPath} und {coincidentFile} werden {toNewName}");
+                }
+
+                moves.Add((fromPath, Path.Join(dirInfoTree.FullPath, toNewName)));
+            }
+
+            return moves;
+        }
+
+        /// <summary>
         /// Sucht die Diagramm (DFS), um die Umbenennungen der Dateien zu planen.
         /// </summary>
         /// <param name="dirInfoTree">Die Diagramm des Dateisystems unter einem Ordner.</param>
@@ -26,7 +52,7 @@ namespace SettleImageGallery
         /// Das Präfix für den obersten Ordner in der angegebenen Diagram,
         /// das für alle Dateien unmittelbar darunter angewandt werden muss.
         /// </param>
-        /// <returns>Eine Planung mit allen Umbenennungen, die ausgeführt werden müssen. </returns>
+        /// <returns>Eine Planung mit allen Umbenennungen, die ausgeführt werden müssen.</returns>
         private static List<(string fromPath, string toNewName)>
         PlanFileRenamings(FileSystemUtils.DirectoryNodeInfo dirInfoTree,
                           string prefix)
