@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileSystemUtils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,38 +7,55 @@ using System.Linq;
 namespace SettleImageGallery
 {
     /// <summary>
-    /// 
+    /// Verwendet die anderen kleinen Komponenten, um die Arbeit
+    /// der Anwedung "SettleImageGallery" durchzuführen.
     /// </summary>
     public class GalleryDirectory
     {
         private FileSystemUtils.IFileSystemAccess _fileSystemAccess;
 
         /// <summary>
-        /// 
+        /// Errichtet ein neues Objekt der Klasse <see cref="GalleryDirectory"/>.
         /// </summary>
-        /// <param name="injectedFileSystemAccess"></param>
+        /// <param name="injectedFileSystemAccess">
+        /// Eine Implementierung von der Schnittstelle <see cref="IFileSystemAccess"/>.
+        /// </param>
         public GalleryDirectory(FileSystemUtils.IFileSystemAccess injectedFileSystemAccess)
         {
             this._fileSystemAccess = injectedFileSystemAccess;
         }
 
         /// <summary>
-        /// 
+        /// Findet alle Dateien, die Bilder sind und unter dem angegebenen Ordner
+        /// direkt oder indirekt stehen, und setzt sie nebeneinander unter diesem
+        /// Ordner. Die Dateien werden umbennant, sodass die damalige hierarchische
+        /// Ordnung aufbewahrt werden kann.
         /// </summary>
-        /// <param name="directoryPath"></param>
+        /// <param name="directoryPath">
+        /// Das Verzeichnis des Ordners, wo sich die Bildergalerie befindet.
+        /// </param>
         public void MoveAllImagesToFlatOrder(string directoryPath)
         {
-            var dirInfoTree = FileSystemUtils.DirectoryNodeInfo.LoadTreeFrom(directoryPath);
+            DirectoryNodeInfo dirInfoTree = DirectoryNodeInfo.LoadTreeFrom(
+                directoryPath,
+                (file) => Filters.IsFile(file.Name, Filters.FileType.Picture)
+            );
             MoveAllImagesToFlatOrder(dirInfoTree);
         }
 
         public void MoveAllImagesToFlatOrder(FileSystemUtils.DirectoryNodeInfo dirInfoTree)
         {
-            var allMoves = ListFileMovesToExecute(dirInfoTree);
-            foreach (var move in allMoves)
+            int count = 0;
+            var moves = ListFileMovesToExecute(dirInfoTree);
+            foreach (var (fromPath, toPath) in moves)
             {
-                _fileSystemAccess.MoveFile(move.from, move.to);
+                if (_fileSystemAccess.MoveFile(fromPath, toPath))
+                {
+                    ++count;
+                }
             }
+
+            Console.WriteLine($"{count} aus {moves.Count} konnten erfolgreich verschoben werden.");
         }
 
         /// <summary>
@@ -127,5 +145,7 @@ namespace SettleImageGallery
 
             return renamings;
         }
-    }
-}
+
+    }// end of class GalleryDirectory
+
+}// end of namespace SettleImageGallery

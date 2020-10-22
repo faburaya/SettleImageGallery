@@ -25,11 +25,11 @@ namespace FileSystemUtils
             switch (extension)
             {
                 case FileExtension.Jpeg:
-                    return filePathInLowerCase.EndsWith($".jpeg")
-                        || filePathInLowerCase.EndsWith($".jpg");
+                    return filePathInLowerCase.EndsWith(".jpeg")
+                        || filePathInLowerCase.EndsWith(".jpg");
 
                 case FileExtension.Png:
-                    return filePathInLowerCase.EndsWith($".png");
+                    return filePathInLowerCase.EndsWith(".png");
 
                 default:
                     throw new NotImplementedException("Dateiendung noch nicht unterstüzt!");
