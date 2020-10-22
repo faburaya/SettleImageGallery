@@ -10,11 +10,34 @@ namespace SettleImageGallery
     /// </summary>
     public class GalleryDirectory
     {
-        private readonly FileSystemUtils.DirectoryNodeInfo _directoryTree;
+        private FileSystemUtils.IFileSystemAccess _fileSystemAccess;
 
-        public GalleryDirectory(FileSystemUtils.DirectoryNodeInfo directoryTree)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="injectedFileSystemAccess"></param>
+        public GalleryDirectory(FileSystemUtils.IFileSystemAccess injectedFileSystemAccess)
         {
-            this._directoryTree = directoryTree;
+            this._fileSystemAccess = injectedFileSystemAccess;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        public void MoveAllImagesToFlatOrder(string directoryPath)
+        {
+            var dirInfoTree = FileSystemUtils.DirectoryNodeInfo.LoadTreeFrom(directoryPath);
+            MoveAllImagesToFlatOrder(dirInfoTree);
+        }
+
+        public void MoveAllImagesToFlatOrder(FileSystemUtils.DirectoryNodeInfo dirInfoTree)
+        {
+            var allMoves = ListFileMovesToExecute(dirInfoTree);
+            foreach (var move in allMoves)
+            {
+                _fileSystemAccess.MoveFile(move.from, move.to);
+            }
         }
 
         /// <summary>
