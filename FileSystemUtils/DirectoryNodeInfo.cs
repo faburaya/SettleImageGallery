@@ -32,9 +32,9 @@ namespace FileSystemUtils
                                  IEnumerable<DirectoryNodeInfo> subdirectories,
                                  IEnumerable<string> fileNames)
         {
-            this.FullPath = fullPath;
-            this.Subdirectories = subdirectories;
-            this.FileNames = fileNames;
+            this.FullPath = fullPath ?? "";
+            this.Subdirectories = subdirectories ?? new DirectoryNodeInfo[0];
+            this.FileNames = fileNames ?? new string[0];
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace FileSystemUtils
         /// Ein <see cref="DirectoryNodeInfo">-Objekt, das Startpunkt der Diagramm ist,
         /// welche die Struktur im Dateisystem wiederspiegelt.
         /// </returns>
-        static public DirectoryNodeInfo LoadTreeFrom(string directoryPath, Func<FileInfo, bool> fileFilter = null)
+        public static DirectoryNodeInfo LoadTreeFrom(string directoryPath, Func<FileInfo, bool> fileFilter = null)
         {
             if (fileFilter == null)
             {
@@ -64,14 +64,14 @@ namespace FileSystemUtils
             return new DirectoryNodeInfo(
                 directoryPath,
                 // Ordner (durch Rekursion):
-                (from dir in fsysDirInfo.GetDirectories()
-                 orderby dir.Name
-                 select LoadTreeFrom(dir.FullName, fileFilter)) ?? new DirectoryNodeInfo[0],
+                from dir in fsysDirInfo.GetDirectories()
+                orderby dir.Name
+                select LoadTreeFrom(dir.FullName, fileFilter),
                 // Dateien:
-                (from file in fsysDirInfo.GetFiles()
-                 where fileFilter(file)
-                 orderby file.Name
-                 select file.Name) ?? new string[0]
+                from file in fsysDirInfo.GetFiles()
+                where fileFilter(file)
+                orderby file.Name
+                select file.Name
             );
         }
     }
