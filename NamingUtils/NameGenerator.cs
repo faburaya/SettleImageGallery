@@ -22,7 +22,9 @@ namespace NamingUtils
             "Wasser", "Sand", "Farbig",
             "Raum", "Ausblick", "Liebe",
             "Allein", "Land", "Boden",
-            "Wand", "Richtig", "Schön"
+            "Wand", "Richtig", "Schön",
+            "Blume", "Ruhig", "Anziehend",
+            "Natur", "Augen", "Haar"
         };
 
         public string GetRandomWord()
