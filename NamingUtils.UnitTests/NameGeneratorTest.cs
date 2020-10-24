@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Xunit;
 
@@ -6,6 +7,21 @@ namespace NamingUtils.UnitTests
 {
     public class NameGeneratorTest
     {
+        [Fact]
+        public void GetRandomWord_WhenRepeatedCalled_ThenReturnsDifferentWords()
+        {
+            var nameGenerator = new NameGenerator();
+            const int count = 10;
+            var words = new SortedSet<string>();
+            for (int idx = 0; idx < count; ++idx)
+            {
+                words.Add(nameGenerator.GetRandomWord());
+            }
+
+            Assert.True(words.Count > 1);
+            Assert.All(words, x => Regex.IsMatch(x, @"\w+"));
+        }
+
         [Fact]
         public void CreateOrderedListOfPrintedNumbers_WhenCountIsZero_ThenThrow()
         {
