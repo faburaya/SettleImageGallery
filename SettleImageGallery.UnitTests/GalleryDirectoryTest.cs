@@ -3,6 +3,8 @@ using System.IO;
 using FileSystemUtils;
 using Xunit;
 using Moq;
+using System.Text.RegularExpressions;
+using Castle.Components.DictionaryAdapter;
 
 namespace SettleImageGallery.UnitTests
 {
@@ -16,7 +18,7 @@ namespace SettleImageGallery.UnitTests
         [Fact]
         public void MoveAllImagesToFlatOrder_OnlyFilesOnTopLevel()
         {
-            string dirPath = AsCrossPlatformPath("./home/Gallerie");
+            string dirPath = AsCrossPlatformPath("./home/Galerie");
             string fileExt = "jpg";
             var fileNames = new string[] { $"eins.{fileExt}", $"zwei.{fileExt}" };
             var directory = new DirectoryNodeInfo(dirPath, null, fileNames);
@@ -33,10 +35,16 @@ namespace SettleImageGallery.UnitTests
             {
                 string fromPath = Path.Join(dirPath, fileName);
                 fileSystemAccessMock.Verify(
-                    obj => obj.MoveFile(It.Is<string>(val => (val == fromPath)),
-                                        It.IsRegex($"\\w+_\\d+\\.{fileExt}")),
-                    Times.Once);
+                    obj => obj.MoveFile(
+                        It.Is<string>(val => val == fromPath),
+                        It.Is<string>(val =>
+                            Regex.IsMatch(Path.GetRelativePath(dirPath, val), $"\\w+_\\d+\\.{fileExt}$")
+                        )
+                    )
+                );
             }
         }
-    }
-}
+
+    }// end of class GalleryDirectoryTest
+
+}// end of namespace SettleImageGallery.UnitTests
