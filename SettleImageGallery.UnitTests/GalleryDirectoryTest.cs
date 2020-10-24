@@ -1,48 +1,62 @@
-using System;
 using System.IO;
-using FileSystemUtils;
-using Xunit;
-using Moq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Castle.Components.DictionaryAdapter;
+
+using FileSystemUtils;
+using Moq;
+using Xunit;
 
 namespace SettleImageGallery.UnitTests
 {
     public class GalleryDirectoryTest
     {
-        private static string AsCrossPlatformPath(string posixPath)
-        {
-            return posixPath.Replace('/', Path.DirectorySeparatorChar);
-        }
+        private static readonly string _fileExt = "jpg";
 
         [Fact]
         public void MoveAllImagesToFlatOrder_OnlyFilesOnTopLevel()
         {
             string dirPath = AsCrossPlatformPath("./home/Galerie");
-            string fileExt = "jpg";
-            var fileNames = new string[] { $"eins.{fileExt}", $"zwei.{fileExt}" };
+            var fileNames = new string[] { $"eins.{_fileExt}", $"zwei.{_fileExt}" };
             var directory = new DirectoryNodeInfo(dirPath, null, fileNames);
 
-            var fileSystemAccessMock = new Mock<IFileSystemAccess>(MockBehavior.Strict);
-            fileSystemAccessMock.Setup(
+            Mock<IFileSystemAccess> fileSystemAccessMock = SetupMockForFileSystemAccess();
+            var galleryDirectory = new GalleryDirectory(fileSystemAccessMock.Object);
+            galleryDirectory.MoveAllImagesToFlatOrder(directory);
+            VerifyCallsTo(fileSystemAccessMock, dirPath, fileNames);
+        }
+
+        private static Mock<IFileSystemAccess> SetupMockForFileSystemAccess()
+        {
+            var mock = new Mock<IFileSystemAccess>(MockBehavior.Strict);
+
+            mock.Setup(
                 obj => obj.MoveFile(It.IsAny<string>(), It.IsAny<string>())
             ).Returns(true);
 
-            var galleryDirectory = new GalleryDirectory(fileSystemAccessMock.Object);
-            galleryDirectory.MoveAllImagesToFlatOrder(directory);
+            return mock;
+        }
 
+        private static void VerifyCallsTo(Mock<IFileSystemAccess> mock,
+                                          string destDirPath,
+                                          IEnumerable<string> fileNames)
+        {
             foreach (string fileName in fileNames)
             {
-                string fromPath = Path.Join(dirPath, fileName);
-                fileSystemAccessMock.Verify(
+                string fromPath = Path.Join(destDirPath, fileName);
+                mock.Verify(
                     obj => obj.MoveFile(
                         It.Is<string>(val => val == fromPath),
                         It.Is<string>(val =>
-                            Regex.IsMatch(Path.GetRelativePath(dirPath, val), $"\\w+_\\d+\\.{fileExt}$")
+                            Regex.IsMatch(Path.GetRelativePath(destDirPath, val), $"^\\w+_\\d+\\.{_fileExt}$")
                         )
                     )
                 );
             }
+        }
+
+        private static string AsCrossPlatformPath(string posixPath)
+        {
+            return posixPath.Replace('/', Path.DirectorySeparatorChar);
         }
 
     }// end of class GalleryDirectoryTest
