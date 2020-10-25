@@ -71,6 +71,27 @@ namespace SettleImageGallery.UnitTests
             VerifyCallsTo(fileSystemAccessMock, dirPath, directory, $"^\\d+_\\w+_\\d+\\.{_fileExt}$");
         }
 
+        [Fact]
+        public void MoveAllImagesToFlatOrder_WhenTwoLevelsOfSubdir_ThenUseTwoPrefixes()
+        {
+            string dirPath = AsCrossPlatformPath("./home/Galerie");
+            string[] fileNames = CreateSomeFileNames();
+
+            DirectoryNodeInfo[] subdirs = {
+                new DirectoryNodeInfo(
+                    Path.Join(dirPath, "A"),
+                    new DirectoryNodeInfo[]{ new DirectoryNodeInfo(Path.Join(dirPath, "A", "B"), null, fileNames) },
+                    null)
+            };
+            var directory = new DirectoryNodeInfo(dirPath, subdirs, null);
+
+            Mock<IFileSystemAccess> fileSystemAccessMock = SetupMockForFileSystemAccess();
+            var galleryDirectory = new GalleryDirectory(fileSystemAccessMock.Object);
+            galleryDirectory.MoveAllImagesToFlatOrder(directory);
+
+            VerifyCallsTo(fileSystemAccessMock, dirPath, directory, $"^\\d+_\\d+_\\w+_\\d+\\.{_fileExt}$");
+        }
+
         private static Mock<IFileSystemAccess> SetupMockForFileSystemAccess()
         {
             var mock = new Mock<IFileSystemAccess>(MockBehavior.Strict);
