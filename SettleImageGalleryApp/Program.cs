@@ -10,14 +10,15 @@ namespace SettleImageGallery
     {
         static void Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 1)
             {
                 Console.WriteLine("Falsche Verwendung! Bitte: SettleImageGallery Verzeichnis_für_Galerie");
+                return;
             }
 
             IFileSystemAccess fileSystemAccess = new FileSystemAccess();
             var gallery = new GalleryDirectory(fileSystemAccess);
-            string galleryDirPath = args[1];
+            string galleryDirPath = args[0];
             gallery.MoveAllImagesToFlatOrder(galleryDirPath);
             RemoveEmptySubdirectories(galleryDirPath);
         }

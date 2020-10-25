@@ -12,6 +12,8 @@ namespace SettleImageGallery
     /// </summary>
     public class GalleryDirectory
     {
+        private NamingUtils.NameGenerator _nameGenerator;
+
         private FileSystemUtils.IFileSystemAccess _fileSystemAccess;
 
         /// <summary>
@@ -23,6 +25,7 @@ namespace SettleImageGallery
         public GalleryDirectory(FileSystemUtils.IFileSystemAccess injectedFileSystemAccess)
         {
             this._fileSystemAccess = injectedFileSystemAccess;
+            this._nameGenerator = new NamingUtils.NameGenerator();
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace SettleImageGallery
         /// Die Diagramm des Dateisystems unter einem Order,
         /// der alle Dateien enthält, die verschoben werden müssen.</param>
         /// <returns>Eine Liste mit allen auszuführenden Bewegungen.</returns>
-        private static List<(string from, string to)> ListFileMovesToExecute(FileSystemUtils.DirectoryNodeInfo dirInfoTree)
+        private List<(string from, string to)> ListFileMovesToExecute(FileSystemUtils.DirectoryNodeInfo dirInfoTree)
         {
             var destinationByOrigin = new Dictionary<string, string>(); // hilt bei der Erkennung eines Zusammenstoßes
             var renamings = PlanFileRenamings(dirInfoTree, "");
@@ -94,7 +97,7 @@ namespace SettleImageGallery
         /// das für alle Dateien unmittelbar darunter angewandt werden muss.
         /// </param>
         /// <returns>Eine Planung mit allen Umbenennungen, die ausgeführt werden müssen.</returns>
-        private static List<(string fromPath, string toNewName)>
+        private List<(string fromPath, string toNewName)>
         PlanFileRenamings(FileSystemUtils.DirectoryNodeInfo dirInfoTree,
                           string prefix)
         {
@@ -113,8 +116,7 @@ namespace SettleImageGallery
                     throw new ApplicationException($"Die Anzahl von Dateien im Ordner ist schlicht zu groß. - \"{dirInfoTree.FullPath}\" enthält {fileCount} Dateien");
                 }
 
-                var nameGenerator = new NamingUtils.NameGenerator();
-                string nameRoot = nameGenerator.GetRandomWord();
+                string nameRoot = _nameGenerator.GetRandomWord();
                 string[] suffixes = NamingUtils.NameGenerator.CreateOrderedListOfPrintedNumbers((ushort)fileCount);
 
                 int idx = 0;
