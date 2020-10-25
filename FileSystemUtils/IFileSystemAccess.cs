@@ -7,7 +7,5 @@
     public interface IFileSystemAccess
     {
         bool MoveFile(string fromPath, string toPath);
-
-        void RecursivelyRemoveEmptyDirectories(string directoryPath);
     }
 }
