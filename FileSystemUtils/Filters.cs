@@ -8,6 +8,8 @@ namespace FileSystemUtils
         {
             Jpeg,
             Png,
+            Mp4,
+            Wmv,
             // andere...
         }
 
@@ -31,6 +33,12 @@ namespace FileSystemUtils
                 case FileExtension.Png:
                     return filePathInLowerCase.EndsWith(".png");
 
+                case FileExtension.Mp4:
+                    return filePathInLowerCase.EndsWith(".mp4");
+
+                case FileExtension.Wmv:
+                    return filePathInLowerCase.EndsWith(".wmv");
+
                 default:
                     throw new NotImplementedException("Dateiendung noch nicht unterstüzt!");
             };
@@ -39,7 +47,8 @@ namespace FileSystemUtils
         public enum FileType
         {
             Picture,
-            // andere...
+            Video,
+            Media
         }
 
         /// <summary>
@@ -57,6 +66,15 @@ namespace FileSystemUtils
                 case FileType.Picture:
                     return IsFile(filePath, FileExtension.Jpeg)
                         || IsFile(filePath, FileExtension.Png);
+
+                case FileType.Video:
+                    return IsFile(filePath, FileExtension.Mp4)
+                        || IsFile(filePath, FileExtension.Wmv);
+
+                case FileType.Media:
+                    return IsFile(filePath, FileType.Picture)
+                        || IsFile(filePath, FileType.Video);
+
                 default:
                     throw new NotImplementedException("Dateityp noch nicht unterstüzt!");
             };

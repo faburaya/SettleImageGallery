@@ -1,4 +1,5 @@
 ﻿using FileSystemUtils;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +42,7 @@ namespace SettleImageGallery
         {
             DirectoryNodeInfo dirInfoTree = DirectoryNodeInfo.LoadTreeFrom(
                 directoryPath,
-                (file) => Filters.IsFile(file.Name, Filters.FileType.Picture)
+                (file) => Filters.IsFile(file.Name, Filters.FileType.Media)
             );
             MoveAllImagesToFlatOrder(dirInfoTree);
         }
