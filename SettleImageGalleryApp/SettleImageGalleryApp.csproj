@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>SettleImageGallery</RootNamespace>
     <StartupObject>SettleImageGallery.Program</StartupObject>
   </PropertyGroup>
