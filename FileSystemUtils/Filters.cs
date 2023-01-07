@@ -7,7 +7,9 @@ namespace FileSystemUtils
         public enum FileExtension
         {
             Jpeg,
+            Webp,
             Png,
+            Gif,
             Mp4,
             Wmv,
             // andere...
@@ -30,8 +32,14 @@ namespace FileSystemUtils
                     return filePathInLowerCase.EndsWith(".jpeg")
                         || filePathInLowerCase.EndsWith(".jpg");
 
+                case FileExtension.Webp:
+                    return filePathInLowerCase.EndsWith(".webp");
+
                 case FileExtension.Png:
                     return filePathInLowerCase.EndsWith(".png");
+
+                case FileExtension.Gif:
+                    return filePathInLowerCase.EndsWith(".gif");
 
                 case FileExtension.Mp4:
                     return filePathInLowerCase.EndsWith(".mp4");
@@ -65,7 +73,9 @@ namespace FileSystemUtils
             {
                 case FileType.Picture:
                     return IsFile(filePath, FileExtension.Jpeg)
-                        || IsFile(filePath, FileExtension.Png);
+                        || IsFile(filePath, FileExtension.Png)
+                        || IsFile(filePath, FileExtension.Gif)
+                        || IsFile(filePath, FileExtension.Webp);
 
                 case FileType.Video:
                     return IsFile(filePath, FileExtension.Mp4)
